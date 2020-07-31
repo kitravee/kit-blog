@@ -1,6 +1,7 @@
 import { Card, Badge } from 'react-bootstrap';
+import Link from 'next/link';
 
-const CardItem = ({ title, subtitle, tags, image, date, author }) => {
+const CardItem = ({ title, subtitle, tags, image, date, author, link }) => {
   return (
     <Card className={`fj-card`}>
       <div className='card-body-wrapper'>
@@ -35,8 +36,11 @@ const CardItem = ({ title, subtitle, tags, image, date, author }) => {
           </Badge>
         ))}
       </div>
-
-      <a className='card-button'>Read More</a>
+      {link && (
+        <Link {...link}>
+          <a className='card-button'>Read More</a>
+        </Link>
+      )}
     </Card>
   );
 };
