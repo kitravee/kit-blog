@@ -1,13 +1,12 @@
 import { Card, Badge } from 'react-bootstrap';
 
-const CardItem = ({ title, subtitle, tags }) => {
-  console.log(tags);
+const CardItem = ({ title, subtitle, tags, image, date, author }) => {
   return (
     <Card className={`fj-card`}>
       <div className='card-body-wrapper'>
         <Card.Header className='d-flex flex-row'>
           <img
-            src={'https://via.placeholder.com/150'}
+            src={author?.avatar || 'https://via.placeholder.com/150'}
             className='rounded-circle mr-3'
             height='50px'
             width='50px'
@@ -15,24 +14,26 @@ const CardItem = ({ title, subtitle, tags }) => {
           />
           <div>
             <Card.Title className='font-weight-bold mb-1'>
-              Placeholder Author
+              {author?.name || 'No name'}
             </Card.Title>
-            <Card.Text className='card-date'>Placeholder Date</Card.Text>
+            <Card.Text className='card-date'>{date}</Card.Text>
           </div>
         </Card.Header>
+
         <div className='view overlay'>
-          <Card.Img
-            src='https://via.placeholder.com/250'
-            alt='Card image cap'
-          />
+          <Card.Img src={image} alt='Card image cap' />
         </div>
+
         <Card.Body>
           <Card.Title className='card-main-title'>{title}</Card.Title>
           <Card.Text>{subtitle}</Card.Text>
         </Card.Body>
-        {tags
-          ? tags.map((tag) => <Badge variant='primary'>{tag}</Badge>)
-          : null}
+
+        {tags?.map((tag, idx) => (
+          <Badge key={idx} variant='primary' className='mr-2'>
+            {tag}
+          </Badge>
+        ))}
       </div>
 
       <a className='card-button'>Read More</a>
