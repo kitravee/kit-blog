@@ -1,6 +1,7 @@
-import { Card } from 'react-bootstrap';
+import { Card, Badge } from 'react-bootstrap';
 
-const CardItem = () => {
+const CardItem = ({ title, subtitle, tags }) => {
+  console.log(tags);
   return (
     <Card className={`fj-card`}>
       <div className='card-body-wrapper'>
@@ -26,10 +27,14 @@ const CardItem = () => {
           />
         </div>
         <Card.Body>
-          <Card.Title className='card-main-title'>Placeholder Title</Card.Title>
-          <Card.Text>Placehodler Subtitle</Card.Text>
+          <Card.Title className='card-main-title'>{title}</Card.Title>
+          <Card.Text>{subtitle}</Card.Text>
         </Card.Body>
+        {tags
+          ? tags.map((tag) => <Badge variant='primary'>{tag}</Badge>)
+          : null}
       </div>
+
       <a className='card-button'>Read More</a>
     </Card>
   );
