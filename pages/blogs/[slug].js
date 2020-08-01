@@ -12,10 +12,29 @@ const BlogDetail = ({ blog }) => {
   );
 };
 
-export async function getServerSideProps({ params }) {
+// export async function getServerSideProps({ params }) {
+//   const blog = await getBlogBySlug(params.slug);
+//   return {
+//     props: { blog }, // will be passed to the page component as props
+//   };
+// }
+
+export async function getStaticProps({ params }) {
   const blog = await getBlogBySlug(params.slug);
   return {
     props: { blog }, // will be passed to the page component as props
+  };
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: [
+      { params: { slug: 'my-first-blog' } },
+      { params: { slug: 'my-second-blog' } },
+      { params: { slug: 'ggg' } }, // See the "paths" section below
+    ],
+    fallback: false,
+    //   fallback: true or false // See the "fallback" section below
   };
 }
 
