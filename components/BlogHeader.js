@@ -1,8 +1,6 @@
 import React from 'react';
-
-const BlogHeader = ({
-  blog: { title, subtitle, coverImage, author, date },
-}) => {
+import { urlFor } from 'lib/api';
+const BlogHeader = ({ title, subtitle, coverImage, author, date }) => {
   return (
     <div className='blog-detail-header'>
       <p className='lead mb-0'>
@@ -23,7 +21,7 @@ const BlogHeader = ({
       {/* Check if contains cover image */}
       <img
         className='img-fluid rounded'
-        src={coverImage}
+        src={`${coverImage}`}
         alt='TOFO: provide alt'
       />
     </div>

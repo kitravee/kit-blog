@@ -40,6 +40,7 @@ export default function Home({ blogs }) {
 
 export async function getStaticProps() {
   const blogs = await getAllBlogs();
+  debugger;
   return {
     props: {
       blogs,
