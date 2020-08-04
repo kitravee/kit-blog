@@ -1,46 +1,57 @@
-import { Row, Col, Card } from 'react-bootstrap';
+import { useState } from 'react';
+import { Row, Button } from 'react-bootstrap';
 import PageLayout from 'components/PageLayout';
 import AuthorIntro from 'components/AuthorIntro';
 import CardItem from 'components/CardItem';
-// import CardListItem from 'components/CardListItem';
+import FilteringMenu from 'components/FilteringMenu';
+import CardListItem from 'components/CardListItem';
+
+import { useGetBlogsPages } from 'actions/pagination';
 
 import { getAllBlogs } from 'lib/api';
 
 export default function Home({ blogs }) {
+  const [filter, setFilter] = useState({
+    view: { list: 0 },
+  });
+
+  const { pages, isLoadingMore, isReachingEnd, loadMore } = useGetBlogsPages({
+    blogs,
+    filter,
+  });
+
   return (
     <PageLayout>
       <AuthorIntro />
+      <FilteringMenu
+        filter={filter}
+        onChange={(option, value) => {
+          setFilter({ ...filter, [option]: value });
+        }}
+      />
       <hr />
       {/* {JSON.stringify(blogs)} */}
-      <Row className='mb-5'>
-        {/* <Col md='12'>
-          <CardListItem />
-        </Col>*/}
-        {blogs.map((blog) => (
-          <Col key={blog.slug} md='4'>
-            <CardItem
-              author={blog.author}
-              title={blog.title}
-              subtitle={blog.subtitle}
-              tags={blog.tags}
-              date={blog.date}
-              image={blog.coverImage}
-              slug={blog.slug}
-              link={{
-                href: '/blogs/[slug]',
-                as: `/blogs/${blog.slug}`,
-              }}
-            />
-          </Col>
-        ))}
-      </Row>
+      <Row className='mb-5'>{pages}</Row>
+      <div style={{ textAlign: 'center' }}>
+        <Button
+          onClick={loadMore}
+          disabled={isReachingEnd || isLoadingMore}
+          size='lg'
+          variant='outline-secondary'
+        >
+          {isLoadingMore
+            ? '...'
+            : isReachingEnd
+            ? 'No more blogs'
+            : 'More Blogs'}
+        </Button>
+      </div>
     </PageLayout>
   );
 }
 
 export async function getStaticProps() {
-  const blogs = await getAllBlogs();
-  debugger;
+  const blogs = await getAllBlogs({ offset: 0 });
   return {
     props: {
       blogs,
