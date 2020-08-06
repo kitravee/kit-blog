@@ -2,7 +2,10 @@ import { useSWRPages } from 'swr';
 import { useGetBlogs } from 'actions';
 import { Col } from 'react-bootstrap';
 import CardItem from 'components/CardItem';
+import CardItemBlank from 'components/CardItemBlank';
 import CardListItem from 'components/CardListItem';
+import CardListItemBlank from 'components/CardListItemBlank';
+import moment from 'moment';
 
 export const useGetBlogsPages = ({ blogs, filter }) => {
   return useSWRPages(
@@ -10,10 +13,22 @@ export const useGetBlogsPages = ({ blogs, filter }) => {
     ({ offset, withSWR }) => {
       let initialData = !offset && blogs;
       const { data: paginatedBlogs } = withSWR(
-        useGetBlogs({ offset }, initialData),
+        useGetBlogs({ offset, filter }, initialData),
       );
       if (!paginatedBlogs) {
-        return 'Loading...';
+        return Array(3)
+          .fill(0)
+          .map((_, i) =>
+            filter.view.list ? (
+              <Col key={i} md='9'>
+                <CardListItemBlank />
+              </Col>
+            ) : (
+              <Col key={`${i}-item`} md='4'>
+                <CardItemBlank />
+              </Col>
+            ),
+          );
       }
 
       return paginatedBlogs.map((blog) =>
@@ -23,7 +38,7 @@ export const useGetBlogsPages = ({ blogs, filter }) => {
               author={blog.author}
               title={blog.title}
               subtitle={blog.subtitle}
-              date={blog.date}
+              date={moment(blog.date).format('LLL')}
               link={{
                 href: '/blogs/[slug]',
                 as: `/blogs/${blog.slug}`,
@@ -36,7 +51,7 @@ export const useGetBlogsPages = ({ blogs, filter }) => {
               author={blog.author}
               title={blog.title}
               subtitle={blog.subtitle}
-              date={blog.date}
+              date={moment(blog.date).format('LLL')}
               image={blog.coverImage}
               link={{
                 href: '/blogs/[slug]',
@@ -55,7 +70,7 @@ export const useGetBlogsPages = ({ blogs, filter }) => {
       if (SWR.data && SWR.data.length === 0) {
         return null;
       }
-      return (index + 1) * 3;
+      return (index + 1) * 6;
     },
     [filter],
   );

@@ -18,12 +18,13 @@ const BlogHeader = ({ title, subtitle, coverImage, author, date }) => {
         {title}
       </h1>
       <h2 className='blog-detail-header-subtitle mb-3'>{subtitle}</h2>
-      {/* Check if contains cover image */}
-      <img
-        className='img-fluid rounded'
-        src={`${coverImage}`}
-        alt='TOFO: provide alt'
-      />
+      {coverImage && (
+        <img
+          className='img-fluid rounded'
+          src={coverImage}
+          alt='TODO: provide alt'
+        />
+      )}
     </div>
   );
 };
